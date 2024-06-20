@@ -5,11 +5,21 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import hortifruti.util.Cores;
+import hortifruti.model.Produto;
+import hortifruti.model.Fruta;
+import hortifruti.model.Legume;
 
 
 public class Menu {
 
 	public static void main(String[] args) {
+		
+		
+		Fruta p1 = new Fruta(1,1,"maçã",2);
+		p1.visualizar();
+		
+		Legume p2 = new Legume(1,2,"uva",3);
+		p2.visualizar();
 
 		Scanner leia = new Scanner(System.in);
 
