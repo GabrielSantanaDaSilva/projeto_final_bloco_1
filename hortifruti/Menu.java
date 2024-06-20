@@ -8,18 +8,17 @@ import hortifruti.util.Cores;
 import hortifruti.model.Produto;
 import hortifruti.model.Fruta;
 import hortifruti.model.Legume;
-
+import hortifruti.controller.ProdutoController;
 
 public class Menu {
 
 	public static void main(String[] args) {
-		
-		
-		Fruta p1 = new Fruta(1,1,"maçã",2);
-		p1.visualizar();
-		
-		Legume p2 = new Legume(1,2,"uva",3);
-		p2.visualizar();
+
+		ProdutoController produtos = new ProdutoController();
+
+		int id, tipo;
+		float valor;
+		String nome;
 
 		Scanner leia = new Scanner(System.in);
 
@@ -55,7 +54,8 @@ public class Menu {
 			}
 
 			if (opcao == 6) {
-				System.out.println(Cores.TEXT_WHITE_BOLD + "\nHortifruti Sant'Ana - Obrigado por escolher nossos produtos!!");
+				System.out.println(
+						Cores.TEXT_WHITE_BOLD + "\nHortifruti Sant'Ana - Obrigado por escolher nossos produtos!!");
 				sobre();
 				leia.close();
 				System.exit(0);
@@ -64,10 +64,47 @@ public class Menu {
 			switch (opcao) {
 			case 1:
 				System.out.println(Cores.TEXT_WHITE_BOLD + "Criar Produto\n\n");
+				System.out.println("Digite o ID do Produto: ");
+				
+				id = leia.nextInt();
+				System.out.println("Digite o Nome do Produto: ");
+				leia.skip("\\R?");
+				nome = leia.nextLine();
+				System.out.println("Digite o Valor do Produto: ");
+				valor = leia.nextFloat();
+				do {
+					System.out.println("Digite o tipo de Produto: (1- Fruta | 2- Legume");
+					tipo = leia.nextInt();
+				} while (tipo < 1 && tipo > 2);
+
+				switch (tipo) {
+				case 1 -> {
+					System.out.println("O seu Produto é uma fruta? (1- SIM  | 2- NÃO)");
+					tipo = leia.nextInt();
+					if (tipo == 1) {
+						produtos.cadastrar(new Fruta(produtos.gerarID(), tipo, nome, valor));
+					} else {
+						produtos.cadastrar(new Legume(produtos.gerarID(), tipo, nome, valor));
+					}
+					break;
+				}
+				case 2 -> {
+					System.out.println("O seu Produto é um Legume? (2- SIM  | 1- NÃO)");
+					tipo = leia.nextInt();
+					if (tipo == 2 ) {
+						produtos.cadastrar(new Legume(produtos.gerarID(), tipo, nome, valor));
+					} else {
+						produtos.cadastrar(new Fruta(produtos.gerarID(), tipo, nome, valor));
+					}
+					break;
+				}
+
+				}
 				keyPress();
 				break;
 			case 2:
 				System.out.println(Cores.TEXT_WHITE_BOLD + "Listar todos os Produtos\n\n");
+				produtos.listarTodas();
 				keyPress();
 				break;
 			case 3:
@@ -90,6 +127,7 @@ public class Menu {
 		}
 
 	}
+
 	public static void keyPress() {
 
 		try {
