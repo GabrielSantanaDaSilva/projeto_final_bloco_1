@@ -16,7 +16,7 @@ public class Menu {
 
 		ProdutoController produtos = new ProdutoController();
 
-		int id, tipo;
+		int id = 0, tipo;
 		float valor;
 		String nome;
 
@@ -65,7 +65,7 @@ public class Menu {
 			case 1:
 				System.out.println(Cores.TEXT_WHITE_BOLD + "Criar Produto\n\n");
 				System.out.println("Digite o ID do Produto: ");
-				
+
 				id = leia.nextInt();
 				System.out.println("Digite o Nome do Produto: ");
 				leia.skip("\\R?");
@@ -91,7 +91,7 @@ public class Menu {
 				case 2 -> {
 					System.out.println("O seu Produto é um Legume? (2- SIM  | 1- NÃO)");
 					tipo = leia.nextInt();
-					if (tipo == 2 ) {
+					if (tipo == 2) {
 						produtos.cadastrar(new Legume(produtos.gerarID(), tipo, nome, valor));
 					} else {
 						produtos.cadastrar(new Fruta(produtos.gerarID(), tipo, nome, valor));
@@ -109,14 +109,69 @@ public class Menu {
 				break;
 			case 3:
 				System.out.println(Cores.TEXT_WHITE_BOLD + "Consultar Produtos - por id\n\n");
+				System.out.println("Digite o Id do Produto: ");
+				id = leia.nextInt();
+
+				produtos.procurarPorID(id);
+
 				keyPress();
 				break;
 			case 4:
 				System.out.println(Cores.TEXT_WHITE_BOLD + "Atualizar dados do Produto\n\n");
+
+				var buscaProduto = produtos.buscarNaCollection(id);
+
+				if (buscaProduto != null) {
+
+					id = buscaProduto.getId();
+
+					System.out.println("Digite o Id do Produto: ");
+					id = leia.nextInt();
+					System.out.println("Digite o nome do Produto: ");
+					leia.skip("\\R?");
+					nome = leia.nextLine();
+					System.out.println("Digite o Valor do Produto: ");
+					valor = leia.nextFloat();
+
+					do {
+						System.out.println("Digite o tipo de Produto: (1- Fruta | 2- Legume");
+						tipo = leia.nextInt();
+					} while (tipo < 1 && tipo > 2);
+
+					switch (tipo) {
+					case 1 -> {
+						System.out.println("O seu Produto é uma fruta? (1- SIM  | 2- NÃO)");
+						tipo = leia.nextInt();
+						if (tipo == 1) {
+							produtos.atualizar(new Fruta(id, tipo, nome, valor));
+						} else {
+							produtos.atualizar(new Legume(id, tipo, nome, valor));
+						}
+						break;}
+						
+					case 2 -> {
+						System.out.println("O seu Produto é um Legume? (2- SIM  | 1- NÃO)");
+						tipo = leia.nextInt();
+						if (tipo == 2) {
+							produtos.atualizar(new Legume(id, tipo, nome, valor));
+						} else {
+							produtos.atualizar(new Fruta(id, tipo, nome, valor));
+						}
+						break;
+					
+					}
+					}
+					
+				} else {
+					System.out.println("A conta não foi encontrada!!");
+				}
 				keyPress();
 				break;
 			case 5:
 				System.out.println(Cores.TEXT_WHITE_BOLD + "Apagar Produto\n\n");
+				System.out.println("Digite o id do produto: ");
+				id = leia.nextInt();
+				produtos.deletar(id);
 				keyPress();
 				break;
 			default:
